@@ -1,202 +1,93 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
 void main() {
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
+      create: (context) => AppState(),
       child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        ),
-        home: MyHomePage(),
+        title: 'GoGarden',
+        home: HomePage(),
       ),
     );
   }
 }
 
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
 
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
-  }
+class AppState extends ChangeNotifier {
 
-  var favorites = <WordPair>[];
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    }
-    else {
-      favorites.add(current);
-    }
-    notifyListeners();
-  }
 }
 
 
-class MyHomePage extends StatefulWidget {
-  @override
-  State<MyHomePage> createState() =>
-      _MyHomePageState();
-}
-
-
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = GeneratorPage();
-        break;
-      case 1:
-        page = Placeholder();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
 
-    return LayoutBuilder(builder: (context, constraints) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("GoGarden"),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: EdgeInsets.all(5),
-              child: ElevatedButton.icon(
-                      label: Text("Search"),
-                      icon: Icon(Icons.search),
-                      onPressed: () {},
+    return Scaffold(
+      backgroundColor: Color(0xFFFBF6E9),
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(height: 80),
+            Image.asset(
+              "assets/logo.png",
+              width: 400,
+              height: 400
+            ),
+            const Text(
+              "Stronger Gardens for a Better Planet",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  letterSpacing: 3
+              )
+            ),
+            SizedBox(height: 50),
+            SizedBox(
+              width: 350,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF48A23F)
+                ),
+                child: Text(
+                    "SIGN UP",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: "Bubblebody Neue",
+                    )
+                )
+              ),
+            ),
+            SizedBox(height: 45),
+            SizedBox(
+              width: 350,
+              height: 40,
+              child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF019A6E)
+                  ),
+                  child: Text(
+                      "LOG IN",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "Bubblebody Neue",
+                      )
                   )
+              ),
             )
           ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.shuffle), label: "Random"),
-            BottomNavigationBarItem(icon: Icon(Icons.shuffle), label: "Random"),
-          ]
-        ),
-        body: Row(
-          children: [
-            SafeArea(
-              child: NavigationRail(
-                extended: constraints.maxWidth >= 600,  // ← Here.
-                destinations: [
-                  NavigationRailDestination(
-                    icon: Icon(Icons.home),
-                    label: Text('Home'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
-                    label: Text('Favorites'),
-                  ),
-                ],
-                selectedIndex: selectedIndex,
-                onDestinationSelected: (value) {
-                  setState(() {
-                    selectedIndex = value;
-                  });
-                },
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: page,
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-}
-
-
-class GeneratorPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var pair = appState.current;
-
-    IconData icon;
-    if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
-    }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BigCard(pair: pair),
-          SizedBox(height: 10),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  appState.toggleFavorite();
-                },
-                icon: Icon(icon),
-                label: Text('Like'),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () {
-                  appState.getNext();
-                },
-                child: Text('Next'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BigCard extends StatelessWidget {
-  const BigCard({
-    super.key,
-    required this.pair,
-  });
-
-  final WordPair pair;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Card(
-      color: theme.colorScheme.primary,
-      elevation: 8,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          pair.asLowerCase,
-          style: style,
-          semanticsLabel: "${pair.first} ${pair.second}",
         ),
       ),
     );
