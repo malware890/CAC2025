@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'signlog.dart';
+import 'home.dart';
 
 
 void main() {
@@ -14,7 +16,13 @@ class App extends StatelessWidget {
       create: (context) => AppState(),
       child: MaterialApp(
         title: 'GoGarden',
-        home: HomePage(),
+        initialRoute: '/lock',
+        routes: {
+          '/lock': (context) => LockPage(),
+          '/signup': (context) => SignUpPage(),
+          '/login': (context) => LogInPage(),
+          '/home': (context) => HomePage(),
+        },
       ),
     );
   }
@@ -26,7 +34,7 @@ class AppState extends ChangeNotifier {
 }
 
 
-class HomePage extends StatelessWidget {
+class LockPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -37,52 +45,57 @@ class HomePage extends StatelessWidget {
           children: [
             SizedBox(height: 80),
             Image.asset(
-              "assets/logo.png",
+              'assets/logo.png',
               width: 400,
               height: 400
             ),
+            SizedBox(height: 15),
             const Text(
-              "Stronger Gardens for a Better Planet",
+              'Stronger Gardens for a Better Planet',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
                   letterSpacing: 3
               )
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 100),
             SizedBox(
               width: 350,
               height: 40,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup');
+                },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF48A23F)
                 ),
                 child: Text(
-                    "SIGN UP",
+                    'SIGN UP',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
-                        fontFamily: "Bubblebody Neue",
+                        fontFamily: 'Bubblebody Neue',
                     )
                 )
               ),
             ),
-            SizedBox(height: 45),
+            SizedBox(height: 30),
             SizedBox(
               width: 350,
               height: 40,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF019A6E)
                   ),
                   child: Text(
-                      "LOG IN",
+                      'LOG IN',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          fontFamily: "Bubblebody Neue",
+                          fontFamily: 'Bubblebody Neue',
                       )
                   )
               ),
@@ -93,4 +106,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
