@@ -218,9 +218,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     if (pswd.isEmpty || user.isEmpty || conf.isEmpty) {
                       _errorMessage = "Please enter all fields!";
                     }
-                    else if (_passwordController.text != _confirmPasswordController.text) {
+                    else if (pswd != conf) {
                       _errorMessage = 'Passwords do not match!';
-                    } else {
+                    }
+                    else if (user.length > 11) {
+                      _errorMessage = 'Username is too long!';
+                    }
+                    else {
                       Navigator.pushNamed(
                         context,
                         '/home',
@@ -405,7 +409,7 @@ class _LogInPageState extends State<LogInPage> {
                         _errorMessage = "Please enter all fields!";
                       }
                       else if (user != "GoGarden" && pswd != "CAC2025") {
-                        _errorMessage = 'Incorrect Credentials!';
+                        _errorMessage = 'Incorrect Credentials!'; // TODO DATABASE
                       } else {
                         Navigator.pushNamed(
                           context,
